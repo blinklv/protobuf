@@ -349,10 +349,8 @@ func (w *jsonWriter) marshalAny(m protoreflect.Message, indent string) error {
 	if w.Indent != "" {
 		w.write("\n")
 	}
-	if !w.OmitTypeURL {
-		if err := w.marshalTypeURL(indent, typeURL); err != nil {
-			return err
-		}
+	if err := w.marshalTypeURL(indent, typeURL); err != nil {
+		return err
 	}
 	w.writeComma()
 	if w.Indent != "" {
@@ -374,6 +372,10 @@ func (w *jsonWriter) marshalAny(m protoreflect.Message, indent string) error {
 }
 
 func (w *jsonWriter) marshalTypeURL(indent, typeURL string) error {
+	if w.OmitTypeURL {
+		return nil
+	}
+
 	if w.Indent != "" {
 		w.write(indent)
 		w.write(w.Indent)
