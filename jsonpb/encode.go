@@ -38,6 +38,9 @@ type Marshaler struct {
 	// EmitDefaults specifies whether to render fields with zero values.
 	EmitDefaults bool
 
+	// OmitTypeURL specifies whether to omit @type field.
+	OmitTypeURL bool
+
 	// Indent controls whether the output is compact or not.
 	// If empty, the output is compact JSON. Otherwise, every JSON object
 	// entry and JSON array value will be on its own line.
@@ -346,8 +349,10 @@ func (w *jsonWriter) marshalAny(m protoreflect.Message, indent string) error {
 	if w.Indent != "" {
 		w.write("\n")
 	}
-	if err := w.marshalTypeURL(indent, typeURL); err != nil {
-		return err
+	if !w.OmitTypeURL {
+		if err := w.marshalTypeURL(indent, typeURL); err != nil {
+			return err
+		}
 	}
 	w.writeComma()
 	if w.Indent != "" {
