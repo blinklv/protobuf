@@ -229,7 +229,7 @@ func (w *jsonWriter) marshalMessage(m protoreflect.Message, indent, typeURL stri
 	}
 
 	firstField := true
-	if typeURL != "" {
+	if typeURL != "" && !w.OmitTypeURL {
 		if err := w.marshalTypeURL(indent, typeURL); err != nil {
 			return err
 		}
